@@ -1,4 +1,6 @@
-# R spatial: scopriamo le funzioni spaziali di R 
+############ R spatial: scopriamo le funzioni spaziali di R 
+
+
 install.packages("sp")  
 #chiamiamo un paccheto dall'esterno, quindi virgolette
 #finestre con luoghi: tutti luoghi i cui viene sviluppato R al momento (CRAN => CRAN MIRROR): meraviglioso!
@@ -75,9 +77,71 @@ spplot(meuse,"zinc")
 #all'interno della funzion spplot le variabili vanno scitte con le virgolette perchè vengono prese dall'esterno
 #il nostro primo grafico spaziale: che emozione!
 
-#finiamo domani!
+# finiamo domani!
 
+### parte due (giorno seguente)
+#richiaiamo la libreria sp e i dati da usare
+library(sp)
+data(meuse)
+# coordinate xy, ascisse e ordinate, del dataset
+# head serve per dare un occhiata veloce al dataset! (memo!)
+coordinates(meuse)=~x+y
+#quando si inserisce una funzione su R e non vediamo risposta, vuol dire che tutto è andato bene!
+spplot(meuse,"zinc")
+#sp (ilpacchetto) + plot! in questa funzione le variabili vanno indicate fra virgolette
+#deve uscire una immagine 
 
+#esercizio: spplot dei dati di rame
+#per vedere come si chiama il rame o head(meuse) : xy in coordinate 
+head(meuse)
+##oppure: per vedere SOLO i nomi delle colonne
+names(meuse)
+#quindi:
+spplot(meuse,"copper")
+# avevamo visto che erano coordinati rame e zinco, infatti anche il primo ha valori decrescenti in base alla lontananza dal fiume
+
+#stesso plottaggio,altra funzione di sp : bubble
+bubble(meuse,"zinc")
+#grafico: stessa rapresentazione di prima, ma invece che dei colori che si relazionano ai diversi valori, qui vengonorelazionati a delle bolle "bubble" in base ad alte o basse concentraione
+# conferma le concentrazioni dell'altro grafico
+## questo mi sembra più immediato ed elegante. si chiama infografico
+
+#esercizio: funzione bubble del rame ma colorato di rosso
+##se si cerca la funzione in rete, vengono fornite tutte le informazioni del caso
+bubble(meuse,"copper",col="red")
+## red va scitto fra virgolette perchè fa riferimento a valori numerici che indicano come viene fatto il colore rosso
+
+#esempio: ci inventiamo dei dati
+# foraminiferi (Sofia), carbon capture (Marco)
+10, 20, 35, 55, 67, 80
+#in R, questa serie di numeri è un vettore (array)
+foram <- c(10, 20, 35, 55, 67, 80)
+#abbiamo dato un nome al dataset!abbiamo creato un oggetto
+carbon <- c(5, 15, 30, 70, 85, 99)
+# abbiamo dato nome anche all'altra serie di numeri (di Marco)
+#inseriamoli su R
+#plottiamo i due dati per vedere se sono relazionati fra loro
+plot(foram, carbon, col="green", cex=2, pch=19)
+#stretta relazione fra il carbonio intrappolato dai foraminiferi e la densità di questi ultimi
+##piccolo esercizio per creare oggeti
+
+#scarica tabella da iol, covid_agg.csv
+#crea una nuova cartellahome: percorso più corto che si può fare!! "lab"
+
+#dati dall'esterno: covid19
+#specifcare la cartella al software con cui utilizziamo
+#cartella appena create 
+#setwd("~/lab")
+setwd("~/lab")
+covid <- read.table("covid_agg.csv",head=TRUE)
+#agg : dati aggregati
+#dobbiamo spiegare a r che ci sono dei titoli
+#TRUE: variabili 1-0, vero falso, .poteva essere anche solo T
+#relazionato al nome covid
+head(covid)
+#vedi la tabellina?
+
+## continua nella prossima puntata...
 
 
 

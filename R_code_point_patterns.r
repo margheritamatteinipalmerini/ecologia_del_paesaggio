@@ -1,5 +1,11 @@
 ## codice per analisi dei point patterns
 
+install.packages("ggplot2")
+library(ggplot2)
+
+install.packages("spatstat")
+library(spatstat)
+
 setwd("~/lab")
 
 #importare dati tabellari
@@ -33,9 +39,56 @@ plot(covid$country,covid$cases,las=3, cex.lab=0.5, cex.axis=0.5)
 
 #passiamo ad una visuaizzazione spaziale
 
+##ggplot2 
+install.packages("ggplot2")
+library(ggplot2)
+#andrebbbero messi all'inizio del codice, per informare di quali librerie ci serviremo.
 
+data(mpg)
+head(mpg)
 
+ggplot(mpg,aes(x=displ,y=hwy)) + geom_point()
+ggplot(mpg,aes(x=displ,y=hwy)) + geom_line()
+# questo tipo viene utilizzato spesso per le variazioni ditemperatura
+ggplot(mpg,aes(x=displ,y=hwy)) + geom_polygon()
+# poco senso
 
+#ggplot di covid
+ggplot(covid,aes(x=lon,y=lat,size=cases)) + geom_point()
+#covid: datast
+#aes
+names(covid)
+head(covid)
+# dimenione punti (size) in relazione numero casi
+#geometria: punti
+
+##esercizio : misurare densità ounti : quale pate del mondo ha una più alta densità di paesi che hanno avuto il coronavirus
+#density
+#ci serve un altro pacchetto, spatstat
+# crear dataset per spatstat
+#diamo un nome al dataset
+library(spatstat)
+attach(covid)
+covidppp <- ppp(lon, lat, c(-180,180), c(-90,90))
+d <- density(covids)
+#le abbiamo dato un nome per utilizzarla meglio
+#facciamo un plot della densità
+plot(d)
+#aggiungiamo due informazioni interessanti: origine e contorni paesi
+points(covids, pch=19)
+
+plot(d)
+points(covids)
+
+#aggiungiamo i contorni dei paesi
+#database internazionale: natural hearth data
+
+#salviamo l'R data compltamente, l'intero progetto, workspace, .rdata
+
+#linux: 
+q()
+# invio, e yes
+# dentro la cartella lab, dovrebbe esserci il file appeana salvato 
 
 
 

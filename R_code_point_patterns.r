@@ -90,7 +90,12 @@ q()
 # invio, e yes
 # dentro la cartella lab, dovrebbe esserci il file appeana salvato 
 
-
-
+#ripartiamo da setwd("~lab")
+setwd("~lab")
+# load: andiamo a caricare pointpattern.Rdata
+load(pointpattern.Rdata
+# ls() per vedere i file
+ls()
+     
 
 

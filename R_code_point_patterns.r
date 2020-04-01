@@ -6,6 +6,8 @@ library(ggplot2)
 install.packages("spatstat")
 library(spatstat)
 
+install.packages("rgdal")
+
 setwd("~/lab")
 
 #importare dati tabellari
@@ -90,12 +92,51 @@ q()
 # invio, e yes
 # dentro la cartella lab, dovrebbe esserci il file appeana salvato 
 
-#ripartiamo da setwd("~lab")
+### day after
+
+# ripartiamo da setwd("~lab")
 setwd("~lab")
 # load: andiamo a caricare pointpattern.Rdata
-load(pointpattern.Rdata
-# ls() per vedere i file
+load(pointpattern.Rdata)
 ls()
-     
+# ls() per vedere i file (di ieri)
+library(spatstat)
+#per visualizzare le immagini della densità
+plot(d)
+# cambiamo set di colori. invertiamo blu e gialli, hostpost di covid:rossi (color ramp palette)
+cl <- colorRampPalette(c('yellow','orange','red'))(100) 
+# c: simbolo per idicare una serie di cose, in questo caso di colori
+# virgolette singole
+# quanti minilivelli fra un livello all'altro .più sono meglio è (gradazioni) : (100)
+## spatstat è una delle librerie che permette di utilizzare questa funzione
+plot(d,col=cl)
+# colore = alla color palette appena creata (cl)
+
+# Exercizio: plot della densità dal verde al blu
+points(covids,pch=19,cex=0.5)
+#casi di covid
+## confini stati : come caricare dati geografici dall'esterno
+# diamo un nome ai file delle nazioni: coastline
+coastline <- readOGR("ne_10m_coastline.shp")
+#readOGR è parte della libraria gdal osgeo
+##osgeo.org
+# inseriamo la libreria rgdal
+install.packages("rgdal")
+library(rgdal)
+coastline <- readOGR("ne_10m_coastline.shp")
+
+# plot della mappa con aggiunta delle coastline
+plot(coastline, add=T)
+#T= true
+## che cos'è questa mappa: rappresenta quanto densi sono i punti nel mondo.
+
+# esercizio plot della mappa di densità con una nuova colorazione e aggiunta delle coastline
+
+cl <- colorRampPalette(c('pink','purple','violet','dark violet'))(100) 
+plot(d, col=cl)
+plot(coastline, add=T, col="light blue")
+
+
+
 
 

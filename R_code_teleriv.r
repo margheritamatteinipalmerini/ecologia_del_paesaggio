@@ -227,5 +227,13 @@ dvi188lr50 <- p224r63_1988lr50$B4_sre - p224r63_1988lr50$B3_sre
 
 #differenza dvilr50
 difdvilr50 <- dvi2011lr50 - dvi1988lr50
+plot(difdvilr50,col=cldifdvi)
+
+#multiframe finale con risultati ottenuti
+par(mfrow=c(2,1))
+plot(difdvi, col=cldifdvi)
+plot(difdvilr50, col=cldifdvi)
+
+
 
 

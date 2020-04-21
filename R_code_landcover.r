@@ -23,3 +23,16 @@ plot(p224r63_2011c$map)
 
 clclass <- colorRampPalette(c('red', 'green', 'blue', 'black'))(100)
 plot(p224r63_2011c$map, col=clclass)
+
+
+# in funzione del numero di classe aumenta l'incertezzadell' arloritmo automatic
+
+
+ 
+ p224r63_2011c <- unsuperClass(p224r63_2011, nClasses=2)
+plot(p224r63_2011c$map)
+
+
+
+
+

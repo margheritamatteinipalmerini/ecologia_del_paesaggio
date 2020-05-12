@@ -104,4 +104,51 @@ cl <- colorRampPalette(c('red','orange','yellow'))(100)
 plot(EN, col=cl)
 
 # c'è stato un cambiaento nelle percentuale di ossidi di azoto in Europa?
+setwd("~/lab/esa_no2")
+library(raster)
+rlist <- list.files(pattern=".png")
+ 
+
+listafinale <- lapply(rlist, raster) #nome:lista finale
+# lapply: applica usa funzione ad una lista. applichiamo la funzione raster ala lista di file (rlist)
+
+# suR
+listafinale
+EN <- stack(listafinale)
+# a questo punto abbiamo fatto la nostra lista di file
+
+EN
+# EN digitato su R: abiam un RasterStack con i nmi all'inerno (EN002, ENoo3...=
+
+# differenza immagino fra gennaio e marco, importando stack
+
+difEN <- EN$EN_0013 - EN$EN00_1
+
+# creiamo una colorramp palette prima di plottare
+cld <- colorRampPalette(c('blue','white','red'))(100) # 
+plot(difEN, col=cld)
+# zone diminuito: diferenze alte, rosso
+# contrario: blu
+
+# plot intero set, più informazioni
+cl <- colorRampPalette(c('red','orange','yellow'))(100) 
+plot(EN, col=cl)
+
+## come è variato l'azoto? (indagine stastica)
+boxplot(EN)
+# mettiamolo orizzontalmente
+boxplot(EN, horizontal=T)
+# rimuoviamo dati outliner
+boxplot(EN, horizontal=T, outline=F)
+# assi
+boxplot(EN, horizontal=T, outline=F, axes=T)
+
+# cabiamento: solo sui valori alti (destra)
+
+
+
+
+
+
+
 

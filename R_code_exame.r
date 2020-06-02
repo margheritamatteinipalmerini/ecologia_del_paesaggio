@@ -263,8 +263,8 @@ head(covid)
 ### QUARTO CODICE
 ### R POINT PATTERN!
 
-## codice per analisi dei point patterns
-
+## MMP codice per analisi dei point patterns
+### TUTTI I PACCHETTI CHE CI SERVIRANNO PER QUESTO CODICE: 
 install.packages("ggplot2")
 library(ggplot2)
 
@@ -275,125 +275,126 @@ install.packages("rgdal")
 
 setwd("~/lab")
 
-#importare dati tabellari
+#MMP importare dati tabellari
 covid <- read.table("covid_agg.csv", head=T)
-#tabella covid_agg.csv in lab
-#dobbiamo spiegare che c'è una intestazione (nomi variabil) 
+#MMP tabella covid_agg.csv in lab
+#MMP dobbiamo spiegare che c'è una intestazione (nomi variabil) 
 head(covid)
-#ogn paese è rappresntato da un punto ed ogni paese ha il proprio numero di casi
+#MMP ogn paese è rappresntato da un punto ed ogni paese ha il proprio numero di casi
  
-#primo plot per visualizzare come sono distribuiti i dati nel mondo
+#MMP primo plot per visualizzare come sono distribuiti i dati nel mondo
 plot(covid$country,covid$cases)
-#country:x
-#y:numero casi
-# $ collega una colonna al proprio dataset 
-## in questo grafico il paese che ha più alto conteuo di casi è la Cina, ma non si vede sulla x. mettiamola sulla x
-# la funzione è las
+#MMP country:x - y:numero casi
+# MMP $ collega una colonna al proprio dataset 
+##MMP  in questo grafico il paese che ha più alto conteuo di casi è la Cina, ma non si vede sulla x. mettiamola sulla x
+# MMP la funzione è las
 plot(covid$country,covid$cases,las=0)
-# vediamo cosa è successo con 0: le etichette sono sempre paralelle all'asse
-# proviamo con las=1
+#MMP vediamo cosa è successo con 0: le etichette sono sempre paralelle all'asse
+#MMP proviamo con las=1
 plot(covid$country,covid$cases,las=1)
-# asse y cambiato: tutte le etichette sono orizzontali
+# MMP asse y cambiato: tutte le etichette sono orizzontali
 plot(covid$country,covid$cases,las=2)
-# las = 2 : lables perpedicolari al proprio asse
+#MMP las = 2 : lables perpedicolari al proprio asse
 plot(covid$country,covid$cases,las=3)
-#las = 3 : tutte le labels sono verticali (è quella che ci piace di più)
-#diminuiamo la grandezza dei punti (cex) => una cosa simile cex.lab, per diminuire leatichette
+#MMP las = 3 : tutte le labels sono verticali (utilizziamo questa)
+#MMP diminuiamo la grandezza dei punti (cex) => una cosa simile cex.lab, per diminuire leatichette
 plot(covid$country,covid$cases,las=3, cex.lab=0.5) 
-#non è quello giusto 
+#MMP non è quello giusto 
 plot(covid$country,covid$cases,las=3, cex.lab=0.5, cex.axis=0.5)
-#ce.axis cambia la dimensione di tutti gli assi
+#MMP ce.axis cambia la dimensione di tutti gli assi
 
-#passiamo ad una visuaizzazione spaziale
+## MMP passiamo ad una visuaizzazione spaziale
 
-##ggplot2 
+##MMP ggplot2 # MMP pacchetto per creare grafici superpersonabilizzabili 
+# MMP in questo pacchetto bisogna stare attenti a specificare le componenti
 install.packages("ggplot2")
 library(ggplot2)
-#andrebbbero messi all'inizio del codice, per informare di quali librerie ci serviremo.
+#MMP andrebbbero messi all'inizio del codice, per informare di quali librerie ci serviremo. 
 
-data(mpg)
+data(mpg) #MMP  mpg: data
 head(mpg)
 
-ggplot(mpg,aes(x=displ,y=hwy)) + geom_point()
-ggplot(mpg,aes(x=displ,y=hwy)) + geom_line()
-# questo tipo viene utilizzato spesso per le variazioni ditemperatura
+ggplot(mpg,aes(x=displ,y=hwy)) + geom_point() #MMP aes: aestetic
+ggplot(mpg,aes(x=displ,y=hwy)) + geom_line()  ## MMP nelle parentesi inseriamo le coordinate
+# MMP questo tipo viene utilizzato spesso per le variazioni di temperatura
 ggplot(mpg,aes(x=displ,y=hwy)) + geom_polygon()
-# poco senso
+#MMP varie geometrie
 
-#ggplot di covid
+# MMP ggplot per covid, richiamiamo prima i nomi con names(covid); IN QUESTO CASO SI RIPETE UTILIZZANDO I DATI RELATIVI ALLA TABELLA COVID
+#MMP CON L'AGGIUNTA DELL'ARGOMENTO size= PER ATTRIBUIRE LA DIMENSIONI AI PUNTI SUL GRAFICO, CHE RAPPRESENTANO IL NUMERO DI CASI.
+
+
 ggplot(covid,aes(x=lon,y=lat,size=cases)) + geom_point()
-#covid: datast
-#aes
+#MMPcovid: datast
+# MMP aes
 names(covid)
 head(covid)
-# dimenione punti (size) in relazione numero casi
-#geometria: punti
+#MMP dimenione punti (size) in relazione numero casi
+#MMPgeometria: punti
 
-##esercizio : misurare densità ounti : quale pate del mondo ha una più alta densità di paesi che hanno avuto il coronavirus
-#density
-#ci serve un altro pacchetto, spatstat
-# crear dataset per spatstat
-#diamo un nome al dataset
+##esercizio : misurare densità punti : quale pate del mondo ha una più alta densità di paesi che hanno avuto il coronavirus
+#MMP density
+#MMP ci serve un altro pacchetto, spatstat
+# MMP crear dataset per spatstat
+#MMP diamo un nome al dataset
 library(spatstat)
 attach(covid)
-covidppp <- ppp(lon, lat, c(-180,180), c(-90,90))
+covidppp <- ppp(lon, lat, c(-180,180), c(-90,90)) # MMP ppp: questo comando permette di convertire i dati in point pattern
 d <- density(covids)
-#le abbiamo dato un nome per utilizzarla meglio
-#facciamo un plot della densità
+#MMP le abbiamo dato un nome per utilizzarla meglio (abbiamo creato un oggetto)
+#MMP facciamo un plot della densità
 plot(d)
-#aggiungiamo due informazioni interessanti: origine e contorni paesi
+#MMP aggiungiamo due informazioni interessanti: origine e contorni paesi
 points(covids, pch=19)
 
 plot(d)
 points(covids)
 
-#aggiungiamo i contorni dei paesi
-#database internazionale: natural hearth data
+#MMP aggiungiamo i contorni dei paesi
+#MMPdatabase internazionale: natural hearth data
 
-#salviamo l'R data compltamente, l'intero progetto, workspace, .rdata
+#MMPsalviamo l'R data compltamente, l'intero progetto, workspace, .rdata 
+q() #PER LINUX
+#MMP invio, e yes
+#MMP dentro la cartella lab, dovrebbe esserci il file appeana salvato 
 
-#linux: 
-q()
-# invio, e yes
-# dentro la cartella lab, dovrebbe esserci il file appeana salvato 
+### SECONDA PARTE (GIORNO SEGUENTE)
 
-### day after
-
-# ripartiamo da setwd("~lab")
+# MMP ripartiamo da setwd("~lab")
 setwd("~lab")
-# load: andiamo a caricare pointpattern.Rdata
+# MMP load: andiamo a caricare pointpattern.Rdata
 load(pointpattern.Rdata)
 ls()
-# ls() per vedere i file (di ieri)
+#MMP ls() per vedere i file (di ieri)
 library(spatstat)
-#per visualizzare le immagini della densità
+#MMP per visualizzare le immagini della densità
 plot(d)
-# cambiamo set di colori. invertiamo blu e gialli, hostpost di covid:rossi (color ramp palette)
+# MMP cambiamo set di colori. invertiamo blu e gialli, hostpost di covid:rossi (color ramp palette)
 cl <- colorRampPalette(c('yellow','orange','red'))(100) 
-# c: simbolo per idicare una serie di cose, in questo caso di colori
-# virgolette singole
-# quanti minilivelli fra un livello all'altro .più sono meglio è (gradazioni) : (100)
-## spatstat è una delle librerie che permette di utilizzare questa funzione
+# MMP c: simbolo per idicare una serie di cose, in questo caso di colori
+###MMP virgolette singole
+#MMP quanti minilivelli fra un livello all'altro, più sono meglio è (gradazioni) : (100)
+## MMP spatstat è una delle librerie che permette di utilizzare questa funzione
 plot(d,col=cl)
-# colore = alla color palette appena creata (cl)
+# MMP colore = alla color palette appena creata (cl)
 
 # Exercizio: plot della densità dal verde al blu
 points(covids,pch=19,cex=0.5)
-#casi di covid
-## confini stati : come caricare dati geografici dall'esterno
-# diamo un nome ai file delle nazioni: coastline
+#MMP casi di covid
+##MMP confini stati : come caricare dati geografici dall'esterno
+# MMP diamo un nome ai file delle nazioni: coastline
 coastline <- readOGR("ne_10m_coastline.shp")
-#readOGR è parte della libraria gdal osgeo
+#MMP readOGR è parte della libraria gdal osgeo
 ##osgeo.org
-# inseriamo la libreria rgdal
+#MMP inseriamo la libreria rgdal
 install.packages("rgdal")
 library(rgdal)
 coastline <- readOGR("ne_10m_coastline.shp")
 
-# plot della mappa con aggiunta delle coastline
+# MMP plot della mappa con aggiunta delle coastline
 plot(coastline, add=T)
-#T= true
-## che cos'è questa mappa: rappresenta quanto densi sono i punti nel mondo.
+#MMP T= true
+##MMP che cos'è questa mappa: rappresenta quanto densi sono i punti nel mondo.
 
 # esercizio plot della mappa di densità con una nuova colorazione e aggiunta delle coastline
 

@@ -403,5 +403,44 @@ plot(d, col=cl)
 plot(coastline, add=T, col="light blue")
 
 
+###################################################################################################################
+#####################################################################################################################
+######################################## #########################################################################
+
+#### MMP  R_code_crop - EXAM SIMULATION
+### MMP crop di neve
+library(raster)
+
+setwd("~/lab/snow/") # non solo lab, ma anche snow perchè abbiamo creato la cartella snow dentro lab
+## MMP scaricare dati da copernicus
+
+# ESERCIZIO: CARICARE TUTTE LE IMMAGINI SNOW
+## CONTROL F PER CERCARE NEL CODICE 
+#LAPPLY
+
+rlist <- list.files(pattern="snow") # tutti i file che contengono snow nel nome
+rlist
+
+list_rast <- lapply(rlist, raster)
+snow.multitemp <- stack(list_rast)
+
+# COLOR RAMP PALETTE
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) # 
+plot(snow.multitemp,col=clb)
+# COSÌ FACCIAMO IL PLOT TUTTO INSIEME, SENZA USARE PAR
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

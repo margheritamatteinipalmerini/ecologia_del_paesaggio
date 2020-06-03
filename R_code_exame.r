@@ -409,6 +409,7 @@ plot(coastline, add=T, col="light blue")
 
 #### MMP  R_code_crop - EXAM SIMULATION
 ### MMP crop di neve
+
 library(raster)
 
 setwd("~/lab/snow/") # non solo lab, ma anche snow perchè abbiamo creato la cartella snow dentro lab
@@ -429,9 +430,48 @@ clb <- colorRampPalette(c('dark blue','blue','light blue'))(100) #
 plot(snow.multitemp,col=clb)
 # COSÌ FACCIAMO IL PLOT TUTTO INSIEME, SENZA USARE PAR
 
+#ZOOM
 
+# QUALI SONO I NOMI DI SNOW MULTITEMP?
+snow.multitemp
+#  PRENDIAMO QUELLO DEL 2010
+plot(snw.multitemp$snow2010, col=clb)
 
+# ZOOM SULLA ITALIA
+# PRIMO METODO: COORDINATE . X: 0-50 (6-15).Y: 40 -50
+extention <- c(6, 18, 40, 50)
+# 6 E 18 SONO LA X MINIMA E MASSIMA, COSÌ COME 40 E 50 SONO LA Y MINORE E MAGGIORE IN PUÒ CASCARE L'ITALIA
+zoom(snow.multitemp$snow2010r, ext=extension) #MANCA QUALCHE PEZZETTINO
+extension <- c(6, 20, 35, 50)
+zoom(snow.multitemp$snow2010r, ext=extension)
 
+plot(snow.multitemp$snow2010r, col=clb)
+zoom(snow.multitemp$snow2010r, ext=drawExtent())
+#R STA ASPETTANDO CHE NOI DISEGNIAMO UN RETTANGOLO SULL'IMMAGINE ORIGINALE: PARTIRE DA PUNTO IN ALTO A SINISTRA,TENERE PREMUTO, FARE UN RETTANGOLO (NON SI VEDE), LASCIARE E CLICCARE UNA VOLTA
+
+#CROP : NUOVA IMMAGINE RITAGLIATA SULLA ZONA DEFINITA
+extension <- c(6, 20, 35, 50)
+snow2010r.italy <- crop(snow.multitemp$snow2010r, extension) # SU CROP NON VA UTILIZZATO EXT
+# NON È UNO ZOOM ,MA UNA VERA IMMAGINE
+plot(snow.italy, col=clb)
+
+##ESERCIZIO : CROP DI ITALY EXTENT DELL'INTERO STACK
+snow.multitemp.italy <- crop(snow.multitemp, extension)
+plot(snow.multitemp.italy, col=clb)
+
+# FACCIAMO LEGENDE TUTTE UGUALI
+# GUARDIAMO I VALORI PIÙ ALTI E PIÙ BASSI
+snow.multitemp.italy
+# MAX= 195 - , MIN= 20
+## FACCIAMO VARIARE DA 20 A 200
+plot(snow.multitemp.italy, col=clb, zlim=c(20,200)) # DI SOLITO SI USANO I VALORI DA 0 A 255
+#ZLIM: SE NON CI FOSSE, AVREI LEGEDE CHE VARIANO IN MODO DIVERSO E QUINDI NON COMPARABILI. 
+## ZLIM QUINDI DEFIISCE I LIMITI DELLE LEGENDE
+
+## ANALISI VELOCE SU TUTTO LO STACK: 
+#BOXPLOT: COME SI COMPORTANO I VALORI? 
+
+boxplot(snow.multitemp.italy, horizontal=T, outline=F) # VEDERE QUANTITATIVAMENTE I VALORI (DI NEVE)NELLE VARIE IMMAGINI. STIMIAMO QUANTO È LA VARIAZIONE DI COPERTURA NEVOSA NELLE VARIE IMMAGINI
 
 
 

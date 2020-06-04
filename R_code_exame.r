@@ -492,6 +492,242 @@ points(Tesippp,col="blue")
 ###################################################################################################################
 ### QUINTO CODICE
 ### R POINT PATTERN!
+#### codice R per le analisi di immagini satellitari
+
+# MMP installare pacchetti che servono per questa analisi
+install.packages("raster")
+# MMP pacchetto per leggere file raster
+
+# MMP library(raster)
+# MMP settaggio working directory
+setwd("~/lab/")
+
+# MMP prendere un immagine dalla cartella e darle un nome
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+plot(p224r63_2011)
+# MMP palette di colori
+
+# MMP save Rdata
+
+## MMP parte due
+
+setwd("~/lab/")
+# MMP caricare dato di ieri
+load("teleril.Rdata")
+ls() 
+# MMP dovremmo avere l'immagine che abbiamo salvato ieri
+##[1] "p224r63" "p224r63_2011"
+# MMP path and row (landstat)
+
+# MMP plottare questa immagine
+plot(p224r63_2011)
+# MMP problem: non abbiamo caricato la libreria giusta , raster
+library(raster)
+plot(p224r63_2011)
+
+# MMP prima banda, B1: riflettante del blu
+# MMP B2: valori riflettante del verde
+# MMP B3 rosso
+# MMP infrarosso vicino
+# MMP infrarosso medio
+# MMP infrarosso termico
+# MMP infrarosso medio (altra banda)
+
+#  MMP da rosino, bianco verde... legenda standard di R
+cl <- colorRampPalette(c('black','grey','light grey'))(100)  # MMP <- colorramppalette assegnata ad un oggetto chiamato cl
+plot(p224r63_2011, col=cl) # MMP cambiamo colore al plot, uguale alla colorRampPalette cambiamo colorazione:a scalare bianco-nero che riflettono i colori di riflettanza naturali
+#  MMP palette appena creata
+# MMP infrarosso termico: valori molto alti, particolare
+#  MMP qual'è il nome della banda del blu?
+names(p224r63_2011)
+# MMP nomi di tutte le bande
+# MMP color ramppalette banda blu
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
+# MMP attach si usa per collegare un datagrame ... ma non può essere usato con raster
+# MMP usiamo un simbolo che lega la colonna ad un dataset(immagine satelliatare) : $
+plot(p224r63_2011$B1_sre, col=clb) # MMP se non aggiungiamo la color ramppalette, plotta ancora nelle tonalità di R
+# MMP parte bianca: eliminata, pixel bianchi
+
+#exercise : plottare la banda dell'infrarosso vicino con colorramp palette che varia dal rosso, arancione, giallo
+clnir <- colorRampPalette(c('red','orange','yellow'))(100)
+plot(p224r63_2011$B4_sre, col=clnir)
+
+# MMP multiframe con 4 bande (blu, rosso, verde, infrarosso vicino)
+par(mfrow=c(2,2)) # MMP row:vicino
+# MMP par: più grafici in una finestra. 2 immagini sopra e sotto (2 righe e 2 colonne: 2,2)
+# MMP prima immagine: blue
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
+plot(p224r63_2011$B1_sre, col=clb)
+#  MMP tutto su R = 
+par(mfrow=c(2,2))
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
+plot(p224r63_2011$B1_sre, col=clb)
+
+# MMP verde - green
+clg <- colorRampPalette(c('dark green','green','light green'))(100)
+plot(p224r63_2011$B2_sre, col=clg)
+
+# MMP red
+clr <- colorRampPalette(c('dark red','red','pink'))(100) #non esiste il light red
+plot(p224r63_2011$B3_sre, col=clr)
+
+#MMP near infrarosso
+clnir <- colorRampPalette(c('red','orange','yellow'))(100)
+plot(p224r63_2011$B4_sre, col=clnir)
+
+#MMP comando che chiude la finestra dei grafici
+dev.off()
+
+#MMP natural colours
+#MMP 3 componenti nella grafica del computer : R G B : montarle alle bande corrispondenti
+# MMP 3 bande per volta : R= red, G= gree, B= blue
+plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="Lin")
+#MMP lin serve per non avere tutto nero
+
+#MMP "false" un colore che l'occhio umanon non può vedere
+#MMP falsato, scalati di uno. B=green (2). 
+plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin") #MMP nir componenente rossa
+dev.off()
+
+par(mfrow=c(1,2))
+plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="Lin")
+plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin")
+#MMP grafico con immagine a colori naturali e poi falsati
+
+par(mfrow=c(2,1))
+plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="Lin")
+plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin")
+dev.off()
+
+# esercizio: nir componente verde
+plotRGB(p224r63_2011,r=3,g=4,b=2, stretch="Lin")
+#piante  foresta: fluorescei. coltivi: blocchi viola
+plotRGB(p224r63_2011,r=3,g=2,b=4, stretch="Lin")
+
+#MMP setwd("~/lab/")
+load("teleriv.Rdata")
+
+#MMP lista dati scorsi
+ls()
+
+p224_1988 <- brick ("p224r63_1988_masked.grd")
+
+#MMP facciamo plot dell'immagine
+plot(p224r63_1988)              
+                 
+
+#MMP multiframe con 4 bande (blu, rosso, verde, infrarosso vicino)
+par(mfrow=c(2,2)) #MMP row:vicino
+clb <- colorRampPalette(c('dark blue','blue','light blue'))(100)
+plot(p224r63_1988$B1_sre, col=clb)
+# tutto su R
+
+#MMP verde - green
+clg <- colorRampPalette(c('dark green','green','light green'))(100)
+plot(p224r63_1988$B2_sre, col=clg)
+
+# MMPre
+clr <- colorRampPalette(c('dark red','red','pink'))(100) #MMP non esiste il light red
+plot(p224r63_1988$B3_sre, col=clr)
+
+#MMP near infrarosso, nir
+clnir <- colorRampPalette(c('red','orange','yellow'))(100)
+plot(p224r63_1988$B4_sre, col=clnir)
+
+#MMP comando che chiude la finestra dei grafici
+dev.off()
+
+# MMP B1: blue - 1
+# MMP B2: green - 2
+# MMP B3: red - 3
+# MMP B4: near infrared (nir) - 4
+##MMP  bande sensore del satellite
+
+#MMP plot RGB con le bande 
+
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+
+
+#esercizio: plot the imagine using the nir on the "r" component in the RGB
+plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin")
+
+#MMP plot delle due immagini, 1988 e 2011
+##MMP par
+#MMP mf: multirme
+par(mlrow=c(2,1))
+plotRGB(p224r63_1988,r=4,g=3,b=2, stretch="Lin", main="1988")
+plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin", main="2011")
+#MMP  diamo un titolo ai singoli garfici: main
+
+#MMP spectral indices 
+#MMP dvi(different vegetation index) 1988 = nir1988 - red1988
+dvi(1988) <- p224r63_1988$B4_sre - p224r63_1988$B3_sre
+#MMP se la pianta è sana il valore sarà molto alto
+plot(dvi1988)
+#MMP stessa cosa dvi 2011
+dvi(2011) <- p224r63_2011$B4_sre - p224r63_2011$B3_sre
+plot(dvi2011)
+
+cldvi<- colorRampPalette(c('light blue','light green','green'))(100)
+
+plot(dvi2011 col=cldvi)
+#MMP meglio colori più distanti
+
+
+#MMP differenza nel tempo fra i due indici 
+
+##MMP  multitemporal analysis
+
+difdvi <- dvi2011 - dvi1988
+plot(difdvi)
+cldifdvi<- colorRampPalette(c('red','white','blue'))(100)
+plot(difdvi, col=cldifdiv)
+
+#MMP par multiframe per vedere tutte  e 3 immagini insieme: 88RGB 2011RGB differenza dvi
+
+
+
+
+par(mlrow=c(3,1))
+plotRGB(p224r63_1988,r=4,g=3,b=2, stretch="Lin")
+plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin")
+plot(difdvi, col=cldifdiv)
+dev.off()
+
+# MMP changing the grain (resolution)
+p224r63_2011lr <- aggregate(p224r63_2011, fact=10)
+# MMP fact: fattore, #aggregate : funzione per aggregare un immagine
+# MMP se ho un pixel di 30 metri, aggiungo factor 10,avrò un pixel di 300 metri
+#MMP lr : low 
+
+par(mfrow=c(2,1))
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011lr, r=4, g=3, b=2, stretch="Lin")
+
+p224r63_2011lr50 <- aggregate(p224r63_2011, fact=50)
+
+par(mfrow=c(3,1))
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011lr, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011lr50, r=4, g=3, b=2, stretch="Lin")
+
+dvi2011lr50 <- p224r63_2011lr50$B4_sre - p224r63_2011lr50$B3_sre
+plot(div201050)
+dev.off()
+
+#MMP dvi1988 low resolution
+p224r63_1988lr50 <- aggregate(p224r63_1988, fact=50)
+dvi188lr50 <- p224r63_1988lr50$B4_sre - p224r63_1988lr50$B3_sre
+
+#MMP differenza dvilr50
+difdvilr50 <- dvi2011lr50 - dvi1988lr50
+plot(difdvilr50,col=cldifdvi)
+
+#MMP multiframe finale con risultati ottenuti
+par(mfrow=c(2,1))
+plot(difdvi, col=cldifdvi)
+plot(difdvilr50, col=cldifdvi)
 
 
 

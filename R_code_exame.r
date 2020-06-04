@@ -1152,6 +1152,95 @@ plot(predicted.snow.2025.norm, col=cl)
 
 # MMP  queste previsioni, fatte sulla base di variazioni attuali, si chiamano scenari
 
+#############################################################################################################################################################################################
+#############################################################################################################################à
+###############################################################################################################
+###############################################################################################################
+###################################################################################################################
+### DECIMO CODICE
+### R PATCHES!
+
+setwd("~/lab/")
+library(raster)
+
+# MMP D1c e D2c erano le due mappe classificate l'altra volta
+# MMP writeRaster (d1c$map, "d1c.tif")
+
+d1c <- raster("d1c.tif")
+d2c <- raster("d2c.tif")
+
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('green','black'))(100) 
+plot(d1c, col=cl)
+plot(d2c, col=cl)
+
+# FORESTA: CLASSE NUMERO UNO, COLORATA DI VERDE. 
+## CBIND ELIMINA ALCUNI VALORI. IN QUESTO CASO,TUTTI I VALORI DI AGRICOLTURE=1 (L'ALTRA CLASSE) => NA: VALORI NULLI ATTRAVERSO FUNZIONE RECLASSIFY
+
+# FOREST= CLASSE DUE. AGRICOLTURA= CLASSE UNO
+
+d1c.for <- reclassify(d1c, cbind(1,NA))
+
+# PLOT
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('black','green'))(100)
+plot(d1c, col=cl)
+plot(d1c.for)
+
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('black','green')(100))
+plot(d1c, col=cl)
+plot(d1c.for, col=cl)
+
+## ABBIAMO RICLASSIFICATO LA NOSTRA MAPPA INIZIALE, E A QUESTO PUNTO POSSIAMO FARE LA STESSA OPERAZIONE PER L'ALTRO PERIODO
+d2c.for <- reclassify(d2c, cbind(1,NA))
+
+## PLOT DI ENTRAMBE LE MAPPE CLASSIFICATE SOLO PER LA FORESTA
+par(mfrow=c(1,2))
+plot(d1c)
+plot(d2c)
+
+# CREATING PATCHES
+clump() # FUNZIONE CHE ANDREMO AD USARE
+d1c.for.patches <- clump(d1c.for)
+d2c.for.patches <- clump(d2c.for)
+
+# SALVARE DATI VERSO L'ESTERNO
+writeRaster(d1c.for.patches, "d1c.for.patches.tif")
+writeRaster(d2c.for.patches, "d2c.for.patches.tif")
+
+#writeRaster: esportare file
+
+# ESERCIZIO: plottare entrambe le mappe una accanto all'altro
+par(mfrow=c(1,2))
+plot(d1c.for.patches)
+plot(d2c.for.patches)
+
+# CAMBIAMO I COLORI, PER OGNI PATCHES UN COLORE DIVERSO
+## NUOVA COLOR RAMP PALETTE
+
+clp <- colorRampPalette(c('dark blue','blue','green','orange','yellow','red'))(100)
+par(mfrow=c(1,2))
+plot(d1c.for.patches, col=clp)
+plot(d2c.for.patches, col=clp)
+
+d1c # PER VEDERE NUMERO DI PATCHES
+
+time <- c("Before deforestation","After deforestation")
+npatches <- c(301 1212)
+
+outpout <- data.frame(time,npatches)
+attach(output)
+
+# PLOT FINALE CON GGPLOT
+
+library(ggplot2)
+ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identify",fill="white")
+
+# GRAFICO FINALE
+## VARIAZIONE DEL NUMERO DEI PATCHES, CON LA VARIAZIONE 
+                    
+
 
 ###################################################################################################################
 #####################################################################################################################

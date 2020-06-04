@@ -1064,6 +1064,95 @@ boxplot(EN,horizontal=T,outiline=F,axes=T)
 #  MMP outline=F -> senza linee esterne
 # MMP  axes=T di defoult, mette gli assi (il contrario axes=F li toglie)
 
+
+#############################################################################################################################################################################################
+#############################################################################################################################à
+###############################################################################################################
+###############################################################################################################
+###################################################################################################################
+### NONO CODICE
+### R SNOW COVER!
+
+# COPERNICUS GLOBAL LAND
+
+## MMP analisi cambiamenti climatici sulla copertura nevosa
+# MMP cryosphere: snow cover
+# MMP basic: data di inizio e fine
+#  MMP downoad, cartella lab
+
+setwd("~/lab/")
+# MMP  libreria ncdf4: dati coMe estenzione nc
+
+install.packages("ncdf4")
+library(ncdf4)
+library(raster)
+# MMP il pacchetto di primA potrebbe essere inserito in alcune versioni nel pachetto raster
+
+## MMP visualizzare il file nc: prima va importato
+# MMP raster(),: raster importa un singolo livello: la copertura della neve quel singolo giorno 
+#  MMP brick () : brick importa diverse bandesno
+snowmay <- raster("c_gls_SCE500_202005180000_CEURO_MODIS_V1.0.1.nc")
+
+cl <- colorRampPalette(c('darkblue','blue','light blue'))(100)
+
+# esecizio: plot snow color con cl
+plot(snowmay, col=cl)
+
+##  MMP cosa ci aspettiamo: che nel tempo la copertura nevosa è diminuita. dati iol: snow.zip <- download in lab (nuova cartell DENTRO LAB COÌ POSSIAO importarli tutti insieme)
+
+
+####  MMP import snow data
+setwd("~/lab/snow") # CARTELLA SNOW
+
+# MMP preniamo una lista di file e le associamo un nome (rlist): file all'interno della cartella
+rlist <- list.files(pattern=".tif")
+rlist 
+# MMP lapppy: applica dei comandi ad un intero set di dati
+## MMP funzione che ci interessa:raster
+## MMP creiamo uno stack: un tipo di oggetto all'iterno di R a cui daremo un nom
+list_rast <- lapply(rlist, raster)
+snow.multitemp <- stack(list_rast)
+
+plot(snow.multitemp,col=cl)
+
+# MMP differenza netta fra anno 2000 e 2020
+## MMP previsione per anno 2025
+
+ 
+# MMP plot della prima immagine e dell'ultima
+par(mfrow=c(1,2))
+plot(snow.multitemp$snow2000r, col=cl)
+plot(snow.multitemp$snow2020r, col=cl)
+#  MMP la secoda immagine non arriva a 250 nella legenda ma solo a 200 : zlim
+par(mfrow=c(1,2))
+plot(snow.multitemp$snow2000r, col=cl, zlim=c(0,250)) ## SE NON HANNO GLI STESSI VALORI NON POSSONO ESSERE CONFRONTATE
+plot(snow.multitemp$snow2020r, col=cl, zlim=c(0,250))
+dev.off()
+
+difsnow = snow.multitemp$snow2020r - snow.multitemp$snow2000r
+cldiff <- colorRampPalette(c('blue','white','red'))(100) 
+plot(difsnow, col=cldiff) # MMP differenza pincipale fra i due set: sotratta imagine 2000 a quella 2020
+
+# MMP  previsione multitemporale: 2025, quale sarà la copertura nevosa ?
+# MMP Iol: prediction.r <- creare previsione futura
+# MMP lm: modello linere, x:rispetto linea del tempo... incognita che vogliamo avere come valore. time
+#  MMP salva prediction.r nella snow in lab
+
+#  MMP source : funzione per richiamare codice dall'esterno
+source("prediction.r")
+# MMP richiamiamo il codice contenuto in prediction
+
+
+
+predicted.snow.2025.norm <- raster("predicted.snow.2025.norm.tif")
+##  MMP importa file da iol
+
+## MMP plottaggio previsione
+plot(predicted.snow.2025.norm, col=cl)
+
+# MMP  queste previsioni, fatte sulla base di variazioni attuali, si chiamano scenari
+
+
 ###################################################################################################################
 #####################################################################################################################
 ######################################## #########################################################################

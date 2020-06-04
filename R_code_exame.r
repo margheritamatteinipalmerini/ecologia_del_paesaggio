@@ -1238,7 +1238,7 @@ library(ggplot2)
 ggplot(output, aes(x=time, y=npatches, color="red")) + geom_bar(stat="identify",fill="white")
 
 # GRAFICO FINALE
-## VARIAZIONE DEL NUMERO DEI PATCHES, CON LA VARIAZIONE 
+## VARIAZIONE DEL NUMERO DEI PATCHES.
                     
 
 

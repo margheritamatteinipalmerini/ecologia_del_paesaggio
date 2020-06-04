@@ -1,4 +1,20 @@
 #CODICI PER ESAME
+# R_code_exam.r
+
+# Copernicus data: https://land.copernicus.vgt.vito.be/PDF/portal/Application.html
+
+# 1. R_code_first.r	
+# 2. R_code_spatial.r	
+# 3. R_code_spatial2.r
+# 4. R_code_point_pattern	
+# 5. R_code_teleril.r	
+# 6. R_code_landcover.r	
+# 7. R_code_multitemp.r	
+# 8. R_code_multitemp_NO2.r	
+# 9. R_code_snow.r	
+# 10. R_code_patches.r	
+# 11. R_code_crop.r -  exam simulation
+
 
 ### PRIMO CODICE 
 ### PAIRS AND PLOT
@@ -396,11 +412,89 @@ plot(coastline, add=T)
 #MMP T= true
 ##MMP che cos'è questa mappa: rappresenta quanto densi sono i punti nel mondo.
 
-# esercizio plot della mappa di densità con una nuova colorazione e aggiunta delle coastline
+# MMP esercizio plot della mappa di densità con una nuova colorazione e aggiunta delle coastline
 
 cl <- colorRampPalette(c('pink','purple','violet','dark violet'))(100) 
 plot(d, col=cl)
 plot(coastline, add=T, col="light blue")
+
+################### INTERPOLAZIONE
+
+setwd("~/lab")
+
+# MMP caricare il file RData che useremo
+load("sanmarino.RData")
+
+#MMP visualiziamo i dati 
+ls()
+
+# MMP dT è la density map
+# MMP Tesi è un dataset che si trovava all'interno di "Tesi.RData"
+# MMP Tesippp è il point pattern:  coordinate della tabella originale 
+# MMP la density map siamo riusciti a farla a partire da Tesippp
+
+# MMP carichiamo la libreria
+library(spatstat)
+# MMP visualizziamo la densità di campionamento
+points(Tesippp, col="green")
+ 
+head(Tesi)
+
+#MMP  la funzione marks() associa i valori della variabile che vogliamo interpolare al point pattern (punti spaziali)
+marks(Tesippp)<-Tesi$Species_richness
+# MMP $ indica la colonna del dataset da considerare
+
+#MMP possiamo procedere con l'interpolazione: la stima. Creeremo una mappa continua partendo da valori discreti
+
+#MMP smooth stima i valori dove questi non sono stati misurati
+interpol<-Smooth(Tesippp)
+
+# MMP mappa
+plot(interpol)
+points(Tesippp,col="blue")
+# MMP maggiore richchezza nella parte Sud-Est e nella parte centrale
+
+
+setwd("~/lab")
+# MMP : libreria rgdal:visualizzare tutti i file di tipo vettoriale
+library(rgdal)
+# MMP possiamo leggere il file .shp
+sanmarino<-readOGR("San_Marino.shp")
+# PLOT
+plot(sanmarino) #visualizziamo il territorio di San Marino
+plot(interpol,add=T) #add=T sovrappone la mappa dell'interpolazione alla mappa di San Marino
+points(Tesippp,add=T) #sovrappone i punti alle mappe di prima
+plot(sanmarino,add=T) #per far vedere di nuovo i confini di San Marino
+
+
+## Exercise: plot multiframe di densità e interpolazione
+par(mfrow=c(2,1))
+
+plot(dT,main="Density of points")
+points(Tesippp,col="blue")
+
+plot(interpol,main="Estimate of species richness")
+points(Tesippp,col="blue")
+
+# esercizio: due colonne e una riga
+par(mfrow=c(1,2))
+
+plot(dT,main="Density of points")
+points(Tesippp,col="blue")
+
+plot(interpol,main="Estimate of species richness")
+points(Tesippp,col="blue")
+
+#############################################################################################################################################################################################
+#############################################################################################################################à
+###############################################################################################################
+###############################################################################################################
+###################################################################################################################
+### QUINTO CODICE
+### R POINT PATTERN!
+
+
+
 
 
 ###################################################################################################################

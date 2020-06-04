@@ -491,7 +491,7 @@ points(Tesippp,col="blue")
 ###############################################################################################################
 ###################################################################################################################
 ### QUINTO CODICE
-### R POINT PATTERN!
+### R TELERIV!
 #### codice R per le analisi di immagini satellitari
 
 # MMP installare pacchetti che servono per questa analisi
@@ -730,8 +730,215 @@ plot(difdvi, col=cldifdvi)
 plot(difdvilr50, col=cldifdvi)
 
 
+#############################################################################################################################################################################################
+#############################################################################################################################à
+###############################################################################################################
+###############################################################################################################
+###################################################################################################################
+### SESTO CODICE
+### R LAND COVER!
+#### codice R per le analisi di immagini satellitari
+
+#R code land cover
+setwd("~/lab")
+library(raster)
+library(RStoolbox)
+ p224r63_2011 <- brick("p224r63_2011_masked.grd")
+ # MMP R G B 
+ #MMP landsat bands. 1b, 2g,3r, 4 nir
+ plotRGB(p224r63_2011, r=4,  g=3, b=2, stretch="Lin")
+ 
+ unsuperClass(p224r63_2011, nClasses=4)
+ #MMP classi di copertura suolo
+ 
+ p224r63_2011c <- unsuperClass(p224r63_2011, nClasses=4)
+ 
+ p224r63_2011c
+ #MMP $map: simbolo per unire vari pezzi insieme. uniamo la mappa alnostro modello che abbiamo chiamato p224r63_2011c
+ 
+#MMP andiamo a plottare
+plot(p224r63_2011c$map)
+
+#MMP cambiamo i colori. legenda continua (in caso queso si può cambiare)
+#MMP colorRamppalette
+
+clclass <- colorRampPalette(c('red', 'green', 'blue', 'black'))(100)
+plot(p224r63_2011c$map, col=clclass)
 
 
+# MMP in funzione del numero di classe aumenta l'incertezza dell'algoritmo automatico
+
+ p224r63_2011c <- unsuperClass(p224r63_2011, nClasses=2)
+plot(p224r63_2011c$map)
+
+#############################################################################################################################################################################################
+#############################################################################################################################à
+###############################################################################################################
+###############################################################################################################
+###################################################################################################################
+### SETTIMO CODICE
+### R MULTITEMP!
+# R ANALISI MULTITEMPORALE DELLA LAND COVER
+
+install.packages("gridExtra")
+setwd("~/lab/")
+
+# MMP richiamiamo la libreria raster
+library(raster)
+
+# MMP brick() è una funzione di raster che permette di caricare dei dati dall'esterno, caricando tutte le singole bande se si stratta di una immagine satellitare
+defor1<-brick("defor1_.jpg")
+defor2<-brick("defor2_.jpg")
+
+defor1 #  MMP nel dataet abbiamo 3 bande
+# MMP names: defor1_.1, defor1_.2, defor1_.3 
+# defor1_.1 = NIR
+# defor1_.2 = red
+# defor1_.3 = green
+
+# MMP plottaggio RGB, associamo ogni singola banda ad una componente rgb
+# MMP banda del rosso alla componente NIR, banda del green alla componente red, banda del blu alla componente green
+
+plotRGB(defor1,r=1,g=2,b=3,stretch="Lin")
+
+# Exercize plot della seconda data
+plotRGB(defor2,r=1,g=2,b=3,stretch="Lin")
+
+# MMP plottiamo le due immagini, confronto della foreste pluviale in due momenti diversi, prima e dopo la deforestazione
+par(mfrow=c(2,1))
+plotRGB(defor1,r=1,g=2,b=3,stretch="Lin")
+plotRGB(defor2,r=1,g=2,b=3,stretch="Lin")
+
+dev.off()
+
+#  MMP per la classificazione si usa unsuperClass che significa classificazione non supervisionata, cioè non diamo dei training set al pc
+#  MMP per far ciò dobbiamo caricare un'atra libreria
+library(RStoolbox)
+d1c<-unsuperClass(defor1,nClasses=2)
+#  MMP in d1c abbiamo la mappa
+d1c$map
+
+plot(d1c$map)
+
+cl1<-colorRampPalette(c('green','blue'))(100)
+plot(d1c$map,col=cl1)
+
+# Excersize: classificare con due classi l'immagine satellitare defor2
+#  MMP consideriamo adesso la seconda immagine
+d2c<-unsuperClass(defor2,nClasses=2)
+#  MMP in d1c abbiamo la mappa
+d2c$map
+plot(d2c$map)
+
+cl2<-colorRampPalette(c('green','blue'))(100)
+plot(d2c$map,col=cl2)
+
+# MMP  confrontiamo le due immagini
+par(mfrow=c(2,1))
+plot(d1c$map,col=cl1)
+plot(d2c$map,col=cl2)
+
+par(mfrow=c(1,2))
+plot(d1c$map, col=cl1)
+plot(d2c$map, col=cl2)
+
+dev.off()
+
+###########
+#  MMP classificazione con tre classi dell'immagine satellitare defor2
+#  MMP consideriamo adesso la seconda immagine
+d2c<-unsuperClass(defor2,nClasses=3)
+# MMP in d1c abbiamo la mappa
+d2c$map
+
+plot(d2c$map)
+cl3<-colorRampPalette(c('orange','green','blue'))(100)
+plot(d2c$map,col=cl3)
+###########
+
+
+#  MMP quatificare la quantità di foresta che è stata persa
+# MMP  area aperta = 306059
+#  MMP foresta = 35233
+
+#  MMP calcoliamo dapprima il totale
+totd1<- 306059 + 35233
+#  MMP totd1 = 341292
+#MMP  possiamo calcolare la percentuale
+percent1<-freq(d1c$map)*100/totd1
+### MMP percentuali
+# MMP foreste = 89.7
+# MMP aree aperte = 10.3
+
+# MMP defor2
+freq(d2c$map)
+#MMP foreste = 179087
+# MMP aree aperte = 163639
+
+totd2<-179087 + 163639
+# MMP totd2 = 342726
+# MMP percentuale
+percent2<-freq(d2c$map)*100/totd2
+# MMP foreste = 52.2
+#MMP  aree aperte = 47.8
+
+
+#MMP creiamo un nuovo dataset con i dati ricavati
+cover <- c("Agriculture","Forest")
+before<-c(10.3,89.7)
+after<-c(47.8,52.2)
+output <- data.frame(cover,before,after)
+View(output)
+
+
+##### PARE DUE!!
+
+# MMP riapriamo il file dell'utlima lezione
+setwd("~/lab/")
+load("multitemp.RData")
+ls()
+
+# MMP  rivediamo le immagini a confronto della foresta prima e dopo il disboscamento
+library(raster)
+par(mfrow=c(2,1))
+plot(d1c$map,col=cl1)
+plot(d2c$map,col=cl2)
+dev.off()
+
+# MMP  controliamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
+output
+
+
+# MMP  possiamo quindi fare un plot della percentuale di foresta attuale e precedente
+
+#MMP   plot della percentuale precedente
+# MMP carichiamo la libreria ggplot2
+library(ggplot2)
+grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")
+grafico1
+# MMP  faremo degli istogrammi del dataframe di output
+# MMP  aes: sulla x agricoltura e foresta, sulla y la percentuale di copertura prima della deforestazione
+#MMP  IL colore si baserà sulla cover (agricoltura e foresta)
+# MMP stat sono le statistiche che considera, in questo caso le identità
+#MMP  fill dà il colore alla copertura
+
+## Exercize: plot the histograms of the land cover after deforestation
+grafico22<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")
+grafico2
+
+#MMP   possiamo fare un plot dei due istogrammi per confrontarli
+# MMP  dobbiamo però usare un'altra libreria, la gridExtra 
+install.packages("gridExtra")
+library(gridExtra)
+
+# MMP possiamo quindi procedere a fare un plot con la funzione grid.arrange. La funzione prende vari plot e li mette insieme all'interno di uno stesso grafico (funzione simile a par)
+grid.arrange(grafico1,grafico2,nrow=1)
+# MMP la percentuale di agricoltura relativa a prima della deforestazione sale vertiginosamente fino a raggiungere quasi il livello della foresta dopo la deforestazione
+
+#MMP   mettiamo la scala dell'asse delle y da 0 a 100 così i due grafici possono essere confrontati meglio
+grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
+grafico22<-ggplot(output,aes(x=cover,y=after,color=cover))+geom_bar(stat="identity",fill="white")+ylim(0,100)
+grid.arrange(grafico1,grafico2,nrow=1)
 
 ###################################################################################################################
 #####################################################################################################################

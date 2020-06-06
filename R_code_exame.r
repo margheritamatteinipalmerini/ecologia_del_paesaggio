@@ -111,7 +111,7 @@ pairs(meuse[,3:6],lower.panel=panel.smoothing,upper.panel=panel.correlations,dia
 
 # RICHIAMIMO IL SET DI DATI " MEUSE"
 library(sp)
-data("meuse")
+data(meuse)
 head(meuse)
 
 #FUNZIONE PLOT: CREAZIONE DI UN GRAFICO. 
@@ -140,7 +140,6 @@ plot(cadmium,copper,pch=17,col="pink",main="Primo plot",xlab="cadmio",ylab="copp
 install.packages("GGally")
 install.packages("sp")  
 # MMP chiamiamo un paccheto dall'esterno, quindi virgolette
-# MMP finestre con luoghi: tutti luoghi i cui viene sviluppato R al momento (CRAN => CRAN MIRROR): meraviglioso!
 library(sp) 
 # MMP serve per spiegare al software quale pacchetto richiamare
 data(meuse)
@@ -148,7 +147,7 @@ data(meuse)
 # MMP meuse: dataset
 head(meuse)
 #MMP in questo modo vediamo direttamente non solo gli elementi ma anche le coordinate che utilizzeremo ora
-# esercizi: plot di rapporto fra cadmio e piombo
+# esercizi: plot del rapporto fra cadmio e piombo
 # MMP alla fine faremo un multipannello in cui compaiono più plot
 # MMP alleghiamo il dataframe 
 attach(meuse)
@@ -159,7 +158,7 @@ plot(cadmium,lead,col="purple",pch=19,cex=2)
 #MMP carattere exateration... aumentare (>1) diminuire (<1)
 #MMP dovrebbe uscire un grafico
 #MMP exercise: plot di copper e zinco con  caratteree (simbolo) trinagolo e colore verde
-#MMPtriangolo pch=17
+#MMP triangolo pch=17
 plot(copper,zinc,col="green",pch=17,cex=2)
 #MMP 2: quindi il doppio 
 #MMP solitamnete le vergolette si mettono su un testo: avviso che ci troviamo di fronte ad un testo, ma anche quando facciamo dialogare  il nostro software con qualcosa di esterno.
@@ -178,48 +177,48 @@ plot(cadmium,lead,col="red",pch=19,cex=2)
 plot(copper,zinc,col="green",pch=17,cex=2)
 #MMP multipannelo con pairs --> esiste un pacchetto che può aiuare
 #MMP multiframe automatico: andiamo ad installare 
-install.packages("GGally") ##MMP tutti i pacchetti da installare per rieguire un codice andrebbero messi tutti nelle prime righe
+install.packages("GGally") ##MMP tutti i pacchetti da installare per rieseguire un codice andrebbero messi tutti nelle prime righe
 #MMP virgolette perchè dall'esterno
 library(GGally) #MMP richiamiamolo
 #MMP pairs:multipannello di multivariabili
 ggpairs(meuse) #MMP ci vorrà un sacco, subset []
 ggpairs(meuse[,3:6])
-# MMP, vuol dire "partiamo da"
-#MMP  : "fino a"
-#gMMP rafico: che cos'è? sulla parte diagonale vediamo le singole varibiali e la distribuzione dei dati
-#MMP plot variabili in relaione fra di loro (in modo simetrico)
-# MMP correlazioni
+# MMP , vuol dire "partiamo da"
+#MMP : "fino a"
+#MMP grafico: che cos'è? sulla parte diagonale vediamo le singole varibiali e la distribuzione dei dati
+#MMP plot delle variabili in relaione fra di loro (in modo simetrico)
+#MMP correlazioni
 #MMP coeficente fra -1 e 1
 
 ####MMP  spatial!
 
 head(meuse)
 
-#MMP coordinate: x e y come in tutti i grafici
+#MMP coordinate x e y come in tutti i grafici
 #MMP diciamo al software che ci sono delle coordinate:
 coordinates(meuse)
 ### MMP non incolliamola subito su R: è particolare
 coordinates(meuse)=~x+y
-#MMP in R,per raggruppare dei pezzi usiamo la tilde
-# MMP adesso possiamo incollarlo su R
+#MMP in R,per raggruppare dei pezzi usiamo la tilde (#Linux: Alt Gr + ì)
+#MMP adesso possiamo incollarlo su R
 plot(meuse)
-#MMPg rafico
+#MMP grafico
 spplot(meuse,"zinc")
-#MMP funzione per plottare i dati spazialmente
+#MMP spplot: funzione per plottare i dati spazialmente
 #MMP all'interno della funzion spplot le variabili vanno scitte con le virgolette perchè vengono prese dall'esterno
-#MMP il nostro primo grafico spaziale: che emozione!
 
+############################
 ################### PARTE DUE
 #MMP  richiaiamo la libreria sp e i dati da usare
 library(sp)
 data(meuse)
 # MMP coordinate xy, ascisse e ordinate, del dataset
-# MMPhead serve per dare un occhiata veloce al dataset! (memo!)
+# MMP head serve per dare un occhiata veloce al dataset! (memo!)
 coordinates(meuse)=~x+y
 #MMP ATTENZIONE: quando si inserisce una funzione su R e non vediamo risposta, vuol dire che tutto è andato bene!
 spplot(meuse,"zinc")
 #MMP sp (il pacchetto) + plot  in questa funzione le variabili vanno indicate fra virgolette
-#MMP deve uscire una immagine 
+#DEVE USCIRE UNA IMMAGINE
 
 #esercizio: spplot dei dati del rame
 #MMP per vedere come si chiama il rame: head(meuse) : xy in coordinate 
@@ -234,9 +233,9 @@ spplot(meuse,"copper")
 bubble(meuse,"zinc")
 #MMP grafico: stessa rapresentazione di prima, ma invece che dei colori che si relazionano ai diversi valori, qui vengono relazionati a delle bolle (bubble) in base ad alte o basse concentraione
 # MMP conferma le concentrazioni dell'altro grafico
-# MMP questo tipo digrafico, infografico, forse èpiù immediato ed elegante
+# MMP questo tipo di grafico, infografico, forse è più immediato ed elegante
 
-#MMP esercizio: funzione bubble del rame ma colorato di rosso
+#MMP esercizio: funzione bubble del rame colorato di rosso
 bubble(meuse,"copper",col="red")
 #MMP red va scitto fra virgolette perchè fa riferimento a valori numerici che indicano come viene fatto il colore rosso
 
@@ -265,7 +264,7 @@ setwd("~/lab")
 covid <- read.table("covid_agg.csv",head=TRUE)
 #MMP agg : dati aggregati
 #MMP dobbiamo spiegare a r che ci sono dei titoli
-#MMP TRUE: variabili 1-0, vero falso, .poteva essere anche solo T
+#MMP TRUE: variabili 1-0, vero falso. Poteva essere anche solo T
 #MMP relazionato al nome covid
 head(covid)
 
@@ -273,9 +272,9 @@ head(covid)
 
 #############################################################################################################################################################################################
 #############################################################################################################################à
-###############################################################################################################
-###############################################################################################################
-###################################################################################################################
+############################################################################################################################
+##########################################################################################################################
+#########################################################################################################################
 ### QUARTO CODICE
 ### R POINT PATTERN!
 
@@ -336,19 +335,20 @@ ggplot(mpg,aes(x=displ,y=hwy)) + geom_line()  ## MMP nelle parentesi inseriamo l
 ggplot(mpg,aes(x=displ,y=hwy)) + geom_polygon()
 #MMP varie geometrie
 
-# MMP ggplot per covid, richiamiamo prima i nomi con names(covid); IN QUESTO CASO SI RIPETE UTILIZZANDO I DATI RELATIVI ALLA TABELLA COVID
+#MMP ggplot per covid, richiamiamo prima i nomi con names(covid); IN QUESTO CASO SI RIPETE UTILIZZANDO I DATI RELATIVI ALLA TABELLA COVID
 #MMP CON L'AGGIUNTA DELL'ARGOMENTO size= PER ATTRIBUIRE LA DIMENSIONI AI PUNTI SUL GRAFICO, CHE RAPPRESENTANO IL NUMERO DI CASI.
 
+names(covid)
 
 ggplot(covid,aes(x=lon,y=lat,size=cases)) + geom_point()
-#MMPcovid: datast
-# MMP aes
+#MMP covid: datast
+#MMP aes
 names(covid)
 head(covid)
 #MMP dimenione punti (size) in relazione numero casi
-#MMPgeometria: punti
+#MMP geometria: punti
 
-##esercizio : misurare densità punti : quale pate del mondo ha una più alta densità di paesi che hanno avuto il coronavirus
+##esercizio : misurare densità punti : quale pate del mondo ha una più alta densità di paesi che hanno avuto il coronavirus?
 #MMP density
 #MMP ci serve un altro pacchetto, spatstat
 # MMP crear dataset per spatstat
@@ -356,15 +356,15 @@ head(covid)
 library(spatstat)
 attach(covid)
 covidppp <- ppp(lon, lat, c(-180,180), c(-90,90)) # MMP ppp: questo comando permette di convertire i dati in point pattern
-d <- density(covids)
+d <- density(covidppp)
 #MMP le abbiamo dato un nome per utilizzarla meglio (abbiamo creato un oggetto)
 #MMP facciamo un plot della densità
 plot(d)
 #MMP aggiungiamo due informazioni interessanti: origine e contorni paesi
-points(covids, pch=19)
+points(covidppp, pch=19)
 
 plot(d)
-points(covids)
+points(covidppp)
 
 #MMP aggiungiamo i contorni dei paesi
 #MMPdatabase internazionale: natural hearth data
@@ -386,7 +386,7 @@ library(spatstat)
 #MMP per visualizzare le immagini della densità
 plot(d)
 # MMP cambiamo set di colori. invertiamo blu e gialli, hostpost di covid:rossi (color ramp palette)
-cl <- colorRampPalette(c('yellow','orange','red'))(100) 
+ cl <- colorRampPalette(c('yellow','orange','red')) (100)
 # MMP c: simbolo per idicare una serie di cose, in questo caso di colori
 ###MMP virgolette singole
 #MMP quanti minilivelli fra un livello all'altro, più sono meglio è (gradazioni) : (100)
@@ -395,7 +395,7 @@ plot(d,col=cl)
 # MMP colore = alla color palette appena creata (cl)
 
 # Exercizio: plot della densità dal verde al blu
-points(covids,pch=19,cex=0.5)
+points(covidppp,pch=19,cex=0.5)
 #MMP casi di covid
 ##MMP confini stati : come caricare dati geografici dall'esterno
 # MMP diamo un nome ai file delle nazioni: coastline

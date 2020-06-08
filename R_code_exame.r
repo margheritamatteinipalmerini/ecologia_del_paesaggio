@@ -1414,5 +1414,7 @@ points(species[species$Occurrence == 1,], pch=16)
 ## MAPPA DI DISTRIBUZIONE PREVISTA DELLA DISTRIBUZIONE DI QUESTA SPECIE
 
 
+########################################################################################################################
+## EXAM PROJECT
 
 

@@ -14,6 +14,7 @@
 # 9. R_code_snow.r	
 # 10. R_code_patches.r	
 # 11. R_code_crop.r -  exam simulation
+# 12. R_code_ Species Distribution modelling
 
 
 ### PRIMO CODICE 
@@ -1317,10 +1318,17 @@ boxplot(snow.multitemp.italy, horizontal=T, outline=F) # VEDERE QUANTITATIVAMENT
 #############################################################################################################################
 ##########################################################################################################################
 ######################################################################################################################
+## CODICE DODICESIMO
+# R_code_ Species Distribution modelling
 
+install.packages("sdm")
+library(sdm)
 
+library(raster)
+library(rgdal)
 
-
+#species
+file <- system.file("external
 
 
 

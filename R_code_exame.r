@@ -1327,10 +1327,91 @@ library(sdm)
 library(raster)
 library(rgdal)
 
-#species
-file <- system.file("external
+# CARICARE IL FILE
+file <- system.file("external/species.shp", package="sdm")
+
+# FUNZIONE RGDAL : CARICARE I FILE E LE IMMAGINI
+species <- shapefile(file)
+
+species # SPATIAL POINT DATAFRAME: VEDIAMO TUTTE LE INFORMAZIONI
+
+species$Occurrence
+
+plot(species)
+
+# PUNTI VALORI 1: DOVE È STATA CAMPIONATA E C'ERA (PRESENZA). 0: CAMPIONATA MA ASSENTE
+## ALTRA VISUALIZZAZIONE
+## CONDIZIONE : ==
+
+plot(species[species$Occurrence == 1,],col='blue',pch=16)
+ # SOLO PUNTI IN CUI L'OCCORENZA ERA UNO
+
+##AGGGIUNGERE PUNTI AD UN PLOT PRECEDENTE: FUNZIONE POINT
+# ANDIAMO A AGGIUNGERE I PUNTI IN CUI OCCORRENCE=0
+
+points(species[species$Occurrence == 0,],col='red',pch=16)
+
+# VARIABILI AMBIENTALI
+## TEMPERATUR
+
+## IMPORTIAMO PATH , CARTELLA EXTERNAL
+path <- system.file("external", package="sdm") 
+
+# LISTA FILE, IN UN CERTO PERCORSO (PATH)
+# PATTERN ASC : FILE ASC. 
+lst <- list.files(path=path,pattern='asc$',full.names = T)
+
+# PREDITTORI: VARIABILI (AMBIENTALI) CHE PREDICONO LA DISTRIBUZIONE DELLA SPECIE NELLO SPAZIO
+
+lst 
+
+preds <- stack(lst)
+cl <- colorRampPalette(c('pink','violet','dark violet')) (100)
+
+# PLOT DI UNA SOLA VARIABILE
+plot(preds$elevation, col=cl)
+
+# AGGIUNGIAMO I PUNTI CHE HANNO OCCORRENZA ==1 (PRESENZA)
+
+points(species[species$Occurrence == 1,], pch=16)
+
+## LA SPECIE È PRESENTE A BASSE ELEVATION
+# PLOT TEMPRATURA
+
+plot(preds$temperature, col=cl)
+points(species[species$Occurrence == 1,], pch=16)
+# FORSE AMA LA TEMPERATURA ALTA? 
+# INFATTI È COSÌ 
+
+## PLOT PRECIPITAZIONI
+plot(preds$precipitation, col=cl)
+points(species[species$Occurrence == 1,], pch=16)
+# SITUAZIONE INTERMEDIA
+
+# INDICE DI VEGETAZIONE
+plot(preds$vegetation, col=cl)
+points(species[species$Occurrence == 1,], pch=16)
+# SITUAZIONE OMBREGGIATA 
+
+# MODELLIZZAZIONE
+sdmData
+# DUE ARGOMENTI: TRAIN (AREE DI SAGGIO: SPECIES) E PREDICTORS. 
+
+d <- sdmData(train=species, predictors=preds)
+d
+# Y: OCCORRENZE ALL'INTERNO DELLA SPECIE
+
+m1 <- sdm(Occurrence ~ elevation + precipitation + temperature + vegetation, d, methods="glm")
+# D: DATASET
+
+p1 <- predict( m1, newdata= preds)
+# MODELLO E DATI
+# NEW DATA: NOSTRI PREDITTORI
 
 
+plot(p1, col=cl)
+points(species[species$Occurrence == 1,], pch=16) 
+## MAPPA DI DISTRIBUZIONE PREVISTA DELLA DISTRIBUZIONE DI QUESTA SPECIE
 
 
 

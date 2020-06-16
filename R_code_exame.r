@@ -892,7 +892,7 @@ output <- data.frame(cover,before,after)
 View(output)
 
 
-##### PARE DUE!!
+##### PARTE DUE!!
 
 # MMP riapriamo il file dell'utlima lezione
 setwd("~/lab/")
@@ -906,7 +906,7 @@ plot(d1c$map,col=cl1)
 plot(d2c$map,col=cl2)
 dev.off()
 
-# MMP  controliamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
+# MMP  controlLiamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
 output
 
 
@@ -919,7 +919,7 @@ grafico1<-ggplot(output,aes(x=cover,y=before,color=cover))+geom_bar(stat="identi
 grafico1
 # MMP  faremo degli istogrammi del dataframe di output
 # MMP  aes: sulla x agricoltura e foresta, sulla y la percentuale di copertura prima della deforestazione
-#MMP  IL colore si baserà sulla cover (agricoltura e foresta)
+#MMP  Il colore si baserà sulla cover (agricoltura e foresta)
 # MMP stat sono le statistiche che considera, in questo caso le identità
 #MMP  fill dà il colore alla copertura
 
@@ -1087,7 +1087,7 @@ setwd("~/lab/")
 install.packages("ncdf4")
 library(ncdf4)
 library(raster)
-# MMP il pacchetto di primA potrebbe essere inserito in alcune versioni nel pachetto raster
+# MMP il pacchetto di prima potrebbe essere inserito in alcune versioni nel pachetto raster
 
 ## MMP visualizzare il file nc: prima va importato
 # MMP raster(),: raster importa un singolo livello: la copertura della neve quel singolo giorno 
@@ -1105,7 +1105,7 @@ plot(snowmay, col=cl)
 ####  MMP import snow data
 setwd("~/lab/snow") # CARTELLA SNOW
 
-# MMP preniamo una lista di file e le associamo un nome (rlist): file all'interno della cartella
+#  MMP preniamo una lista di file e le associamo un nome (rlist): file all'interno della cartella
 rlist <- list.files(pattern=".tif")
 rlist 
 # MMP lapppy: applica dei comandi ad un intero set di dati

@@ -24,7 +24,7 @@
 # USIAMO LA FUNZIONE install.packages("sp")
 install.packages("sp")
 
-#UNA VOLTA INSTALLATO, RICHIAMIAMO IL PACCHETTO CON LA FUNZIONE library(). IN CASO, UN ALRO COMANDO PER FARE PARTIRE LE LIBRERIE È require().
+#UNA VOLTA INSTALLATO, RICHIAMIAMO IL PACCHETTO CON LA FUNZIONE library(). IN CASO, UN ALTRO COMANDO PER FARE PARTIRE LE LIBRERIE È require().
 library(sp)
 
 # CON LA FUNZIONE data POSSIAMO VEDERE I DATI A DISPOSIZIONE IN QUESTA LIBRERIA, MENTRE meuse INDICA IL DATASET DI RIFERIMENTO
@@ -56,7 +56,7 @@ pairs(meuse[,3:6], col="purple", pch=19)
 pairs(meuse[,3:6], col="purple", pch=19, cex=3)
 pairs(meuse[,3:6], col="purple", pch=19, cex=3, main="Primo pairs")
 # COL= FUNZIONE PER CAMBIARE COLORE, PCH= FUNZIONE PER CAMBIARE CARATTERE, CEX= FUNZIONE PER CAMBIARE DIMENSIONE
-# MAIN: FUNIONE PER DARE UN NOME A QUESTO GRAFICO
+# MAIN: FUNzIONE PER DARE UN NOME A QUESTO GRAFICO
 ## LA VIRGOLA SI USA COME SEPARATORE PER INSERIRE PIÙ FUNZIONI.
 
 # Exercise: do the same for the relationship between elevation and the elements
@@ -110,7 +110,7 @@ pairs(meuse[,3:6],lower.panel=panel.correlations,upper.panel=panel.smoothing,dia
 
 pairs(meuse[,3:6],lower.panel=panel.smoothing,upper.panel=panel.correlations,diag.panel=panel.histograms)
 
-# RICHIAMIMO IL SET DI DATI " MEUSE"
+# RICHIAMIAMO IL SET DI DATI " MEUSE"
 library(sp)
 data(meuse)
 head(meuse)
@@ -171,7 +171,7 @@ plot(copper,zinc,col="green",pch=17,cex=2,xlab="rame",ylab"zinco")
 par(mfrow=c(1,2))
 plot(cadmium,lead,col="red",pch=19,cex=2)
 plot(copper,zinc,col="green",pch=17,cex=2)
-# MMP copiare tutto il blocco (le 3 righe sopra) , incollare in R e premere invio
+# MMP copiare tutto il blocco (le 3 righe sopra), incollare in R e premere invio
 # MMP invertiamo riga/colonna colonna/riga
 par(mfrow=c(2,1))
 plot(cadmium,lead,col="red",pch=19,cex=2)
@@ -187,7 +187,7 @@ ggpairs(meuse[,3:6])
 # MMP , vuol dire "partiamo da"
 #MMP : "fino a"
 #MMP grafico: che cos'è? sulla parte diagonale vediamo le singole varibiali e la distribuzione dei dati
-#MMP plot delle variabili in relaione fra di loro (in modo simetrico)
+#MMP plot delle variabili in relazione fra loro (in modo simetrico)
 #MMP correlazioni
 #MMP coeficente fra -1 e 1
 
@@ -210,7 +210,7 @@ spplot(meuse,"zinc")
 
 ############################
 ################### PARTE DUE
-#MMP  richiaiamo la libreria sp e i dati da usare
+#MMP  richiamiamo la libreria sp e i dati da usare
 library(sp)
 data(meuse)
 # MMP coordinate xy, ascisse e ordinate, del dataset
@@ -258,7 +258,7 @@ plot(foram, carbon, col="green", cex=2, pch=19)
 #MMP crea una nuova cartella in home: percorso più corto che si può fare!! "lab"
 
 # MMP dati dall'esterno: covid19
-#MMP specifcare la cartella al software con cui utilizziamo
+#MMP specificare la cartella al software con cui utilizziamo
 #MMP cartella appena create 
 #MMP setwd("~/lab")
 setwd("~/lab")
@@ -296,13 +296,13 @@ covid <- read.table("covid_agg.csv", head=T)
 #MMP tabella covid_agg.csv in lab
 #MMP dobbiamo spiegare che c'è una intestazione (nomi variabil) 
 head(covid)
-#MMP ogn paese è rappresntato da un punto ed ogni paese ha il proprio numero di casi
+#MMP ogni paese è rappresntato da un punto ed ogni paese ha il proprio numero di casi
  
 #MMP primo plot per visualizzare come sono distribuiti i dati nel mondo
 plot(covid$country,covid$cases)
 #MMP country:x - y:numero casi
 # MMP $ collega una colonna al proprio dataset 
-##MMP  in questo grafico il paese che ha più alto conteuo di casi è la Cina, ma non si vede sulla x. mettiamola sulla x
+##MMP  in questo grafico il paese che ha più alto conteggio di casi è la Cina, ma non si vede sulla x. mettiamola sulla x
 # MMP la funzione è las
 plot(covid$country,covid$cases,las=0)
 #MMP vediamo cosa è successo con 0: le etichette sono sempre paralelle all'asse
@@ -313,7 +313,7 @@ plot(covid$country,covid$cases,las=2)
 #MMP las = 2 : lables perpedicolari al proprio asse
 plot(covid$country,covid$cases,las=3)
 #MMP las = 3 : tutte le labels sono verticali (utilizziamo questa)
-#MMP diminuiamo la grandezza dei punti (cex) => una cosa simile cex.lab, per diminuire leatichette
+#MMP diminuiamo la grandezza dei punti (cex) => una cosa simile cex.lab, per diminuire le etichette
 plot(covid$country,covid$cases,las=3, cex.lab=0.5) 
 #MMP non è quello giusto 
 plot(covid$country,covid$cases,las=3, cex.lab=0.5, cex.axis=0.5)
@@ -321,7 +321,8 @@ plot(covid$country,covid$cases,las=3, cex.lab=0.5, cex.axis=0.5)
 
 ## MMP passiamo ad una visuaizzazione spaziale
 
-##MMP ggplot2 # MMP pacchetto per creare grafici superpersonabilizzabili 
+##MMP ggplot2 
+# MMP pacchetto per creare grafici superpersonabilizzabili 
 # MMP in questo pacchetto bisogna stare attenti a specificare le componenti
 install.packages("ggplot2")
 library(ggplot2)
@@ -346,7 +347,7 @@ ggplot(covid,aes(x=lon,y=lat,size=cases)) + geom_point()
 #MMP aes
 names(covid)
 head(covid)
-#MMP dimenione punti (size) in relazione numero casi
+#MMP dimensione punti (size) in relazione numero casi
 #MMP geometria: punti
 
 ##esercizio : misurare densità punti : quale pate del mondo ha una più alta densità di paesi che hanno avuto il coronavirus?
@@ -370,7 +371,7 @@ points(covidppp)
 #MMP aggiungiamo i contorni dei paesi
 #MMPdatabase internazionale: natural hearth data
 
-#MMPsalviamo l'R data compltamente, l'intero progetto, workspace, .rdata 
+#MMP salviamo l'R data completamente, l'intero progetto, workspace, .rdata 
 q() #PER LINUX
 #MMP invio, e yes
 #MMP dentro la cartella lab, dovrebbe esserci il file appeana salvato 
@@ -453,7 +454,7 @@ interpol<-Smooth(Tesippp)
 # MMP mappa
 plot(interpol)
 points(Tesippp,col="blue")
-# MMP maggiore richchezza nella parte Sud-Est e nella parte centrale
+# MMP maggiore ricchezza nella parte Sud-Est e nella parte centrale
 
 
 setwd("~/lab")
@@ -522,7 +523,7 @@ ls()
 
 # MMP plottare questa immagine
 plot(p224r63_2011)
-# MMP problem: non abbiamo caricato la libreria giusta , raster
+# MMP problema: non abbiamo caricato la libreria giusta,raster
 library(raster)
 plot(p224r63_2011)
 
@@ -585,7 +586,7 @@ dev.off()
 plotRGB(p224r63_2011,r=3,g=2,b=1, stretch="Lin")
 #MMP lin serve per non avere tutto nero
 
-#MMP "false" un colore che l'occhio umanon non può vedere
+#MMP "false" un colore che l'occhio umano non può vedere
 #MMP falsato, scalati di uno. B=green (2). 
 plotRGB(p224r63_2011,r=4,g=3,b=2, stretch="Lin") #MMP nir componenente rossa
 dev.off()
@@ -755,12 +756,12 @@ library(RStoolbox)
  p224r63_2011c <- unsuperClass(p224r63_2011, nClasses=4)
  
  p224r63_2011c
- #MMP $map: simbolo per unire vari pezzi insieme. uniamo la mappa alnostro modello che abbiamo chiamato p224r63_2011c
+ #MMP $map: simbolo per unire vari pezzi insieme: uniamo la mappa al nostro modello che abbiamo chiamato p224r63_2011c
  
 #MMP andiamo a plottare
 plot(p224r63_2011c$map)
 
-#MMP cambiamo i colori. legenda continua (in caso queso si può cambiare)
+#MMP cambiamo i colori. legenda continua (in questo caso si può cambiare)
 #MMP colorRamppalette
 
 clclass <- colorRampPalette(c('red', 'green', 'blue', 'black'))(100)
@@ -906,7 +907,7 @@ plot(d1c$map,col=cl1)
 plot(d2c$map,col=cl2)
 dev.off()
 
-# MMP  controlLiamo il dataframe contenete l'agricultura e la foresta prima e dopo il disboscamento
+# MMP  controlLiamo il dataframe contenete l'agricoltura e la foresta prima e dopo il disboscamento
 output
 
 
@@ -1016,7 +1017,7 @@ load("EN.RData")
 ls()
 
 library(raster)# MMP  per importare più immagini insieme 
-## MMP  per importare più immagini insieme bisogna creare una cartella contenente tutti le immagini EN e selezionare questa cartella come nuova WD
+## MMP  per importare più immagini insieme bisogna creare una cartella contenente tutte le immagini EN e selezionare questa cartella come nuova WD
 setwd("~/lab/esa_no2")
 
 #  MMP creiamo una rlist contenente la lista di file .png
@@ -1344,7 +1345,7 @@ plot(species)
 ## CONDIZIONE : ==
 
 plot(species[species$Occurrence == 1,],col='blue',pch=16)
- # SOLO PUNTI IN CUI L'OCCORENZA ERA UNO
+ # SOLO PUNTI IN CUI L'OCCORRENZA ERA UNO
 
 ##AGGGIUNGERE PUNTI AD UN PLOT PRECEDENTE: FUNZIONE POINT
 # ANDIAMO A AGGIUNGERE I PUNTI IN CUI OCCORRENCE=0
@@ -1376,7 +1377,7 @@ plot(preds$elevation, col=cl)
 points(species[species$Occurrence == 1,], pch=16)
 
 ## LA SPECIE È PRESENTE A BASSE ELEVATION
-# PLOT TEMPRATURA
+# PLOT TEMPERATURA
 
 plot(preds$temperature, col=cl)
 points(species[species$Occurrence == 1,], pch=16)

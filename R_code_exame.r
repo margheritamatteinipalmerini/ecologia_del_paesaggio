@@ -1415,6 +1415,229 @@ points(species[species$Occurrence == 1,], pch=16)
 
 
 ########################################################################################################################
-## EXAM PROJECT
+####### EXAM PROJECT
+# MMP Analisi delle variazioni del valore el LAI dal 2000 al 2020, con dati che si riferisono alla situazione agli inizi di marzo degli anni pari. 
+#MMP per il 2020 sono stati presi alla fine di Gennaio, dal momento che non erano disponibili più recenti.
 
+#MMP librerie utili per questa analisi
+library(raster)
+library(ncdf4)
+library(rgdal)
+
+#MMP settare la working directory
+#MMP cartella lai creata dentro la cartella lab
+setwd("~/lab/lai")
+
+# MMP iniziamo con importare la prima immagine, del  2000
+# MMP funzione raster: per importare tutti i livelli.
+lai2000 <- raster("LAI_2000.tiff")
+lai2000 # visualizziamo i suoi valori
+# creiamo una colorpalette
+cl <- colorRampPalette(c("pink", "violet", "purple", "blue", "dark blue"))(100)
+#  plot prima immagine
+plot(lai2000, col=cl)
+
+#MMP molto lungo importare ogni singola immagine in questo modo
+
+#MMP creiamo una lista di file contenuti nella cartella, accumunati da ".tiff"
+llist <- list.files(pattern=".tiff")
+llist 
+#MMP  applichiamo, con apply, la funzione "raster" all'intero dataset per importarlo
+list_rast <- lapply(llist, raster)
+list_rast
+#MMP  con stack: creiamo un oggetto in R a cui diamo un nome, che varrà come dataset
+lai_multitemp <- stack(list_rast)
+lai_multitemp # MMP tutti gli oggetti contenuti dentro lai_multitemp
+#MMP così possiamo procedere con il plottggio, inserendo tutte le immagini in un solo
+# MMP grafico senza utilizzare par
+plot(lai_multitemp, col=cl)
+dev.off()
+
+#MMP boxplot di confronto dal 2000 al 2020
+boxplot(lai_multitemp, horizontal=T, outline=F, main= "boxplot 2000-2020",col="steel blue")
+dev.off()
+
+#MMP  paragoniamo la prima immagine (2000), la 6 (2010) e l'ultima (2020): così 
+#MMP può essere eseguito un confronto più evidente di quello che è avvenuto ogni 10 anni
+
+#MMP  nomi delle singole immagini?
+names(lai_multitemp)
+
+par(mfrow=c(1,3)) # MM Pnon mi piace
+plot(lai_multitemp$LAI_2000, col=cl,main=" LAI 2000" , zlim=c(0,250)) #MMP zlim: impostiamo gli stessi valori di legenda per potere efettuare un paragone
+plot(lai_multitemp$LAI_2010, col=cl, main="LAI 2010 ", zlim=c(0,250))
+plot(lai_multitemp$LAI_2020, col=cl, main="LAI 2020", zlim=c(0,250))
+dev.off()
+
+par(mfrow=c(2,2)) #MMP più bello 
+plot(lai_multitemp$LAI_2000, col=cl,main=" LAI 2000" , zlim=c(0,250))
+plot(lai_multitemp$LAI_2010, col=cl, main="LAI 2010 ", zlim=c(0,250))
+plot(lai_multitemp$LAI_2020, col=cl, main="LAI 2020", zlim=c(0,250))
+dev.off()
+
+#### MMP procedimo confrontando le coppie "2000-2010", "2010-2020" e "2000-2020"
+
+## MMP confronto 2000 e 2010
+par(mfrow=c(2,2))
+plot(lai_multitemp$LAI_2000, col=cl,main=" LAI 2000" , zlim=c(0,250))
+plot(lai_multitemp$LAI_2010, col=cl, main="LAI 2010", zlim=c(0,250))
+dev.off()
+# MMP calcolo e plottaggio differenza
+diflai10 <- lai_multitemp$LAI_2010 - lai_multitemp$LAI_2000
+cldiff <- colorRampPalette(c('dark violet',' snow','blue'))(100)
+plot(diflai10, col=cldiff, main=" Differenza fra 2010 e 2000")
+dev.off()
+
+## MMP confronto 2010 e 2020
+par(mfrow=c(2,2))
+plot(lai_multitemp$LAI_2010, col=cl,main=" LAI 2010" , zlim=c(0,250))
+plot(lai_multitemp$LAI_2020, col=cl, main="LAI 2020", zlim=c(0,250))
+dev.off()
+#MMP calcolo e plottaggio differenza
+diflai20 <- lai_multitemp$LAI_2020 - lai_multitemp$LAI_2010
+cldiff <- colorRampPalette(c('dark violet',' snow','blue'))(100)
+plot(diflai20, col=cldiff, main=" Differenza fra 2020 e 2010")
+dev.off()
+
+## MMP confronto 2000 e 2020
+par(mfrow=c(2,2))
+plot(lai_multitemp$LAI_2000, col=cl,main=" LAI 2000" , zlim=c(0,250))
+plot(lai_multitemp$LAI_2020, col=cl, main="LAI 2020", zlim=c(0,250))
+dev.off()
+#MMP calcolo e plottaggio differenza
+diflai <- lai_multitemp$LAI_2020 - lai_multitemp$LAI_2000
+cldiff <- colorRampPalette(c('dark violet',' snow','blue'))(100)
+plot(diflai, col=cldiff, main="Differenza fra 2020 e 2000")
+dev.off()
+
+
+###### MMP zoom su Europa/Italia con boxplot  di tutti gli anni
+
+####Europa: 
+#MMP coordinate X:- 15: 40, Y: 15:90
+extension <- c(-15,40,15,90)# MMP creiamo un vettore extension, con le coordinate
+zoom(lai_multitemp$LAI_2000, ext=extension)
+# MMP zoom crea , appunto, uno zoom della area definite: utile per capire
+# MMP se abbiamo inserito bene le coordinate
+
+extension <- c(-15,40,15,90)
+lai_multitemp.Europe <- crop(lai_multitemp, extension) #MMP crop crea una vera immagine della zona definita
+#MMP  crop lo applichiamo a tutto lai_multitemp
+
+# MMP per l'Europa, eseguiamo il plottaggio e costruiamo un boxplot per tutti gli anni
+
+plot(lai_multitemp.Europe, col=cl, zlim=c(0,250))
+
+boxplot(lai_multitemp.Europe, horizontal=T, outline=F, col="orchid", main="boxplot Europe")
+
+names(lai_multitemp.Europe)
+
+par(mfrow=c(2,2))
+plot(lai_multitemp.Europe$LAI_2000, main="Europe 2000", col=cl)
+plot(lai_multitemp.Europe$LAI_2010, main="Europe 2010", col=cl)
+plot(lai_multitemp.Europe$LAI_2020, main="Europe 2020", col=cl)
+
+##MMP e procediamo con un confronto del 2000, 2010 e 2020: e poi le singole coppie
+# MMP confronto 2000 - 2010
+par(mfrow=c(2,2))
+plot(lai_multitemp.Europe$LAI_2000, main="Europe 2000", col=cl)
+plot(lai_multitemp.Europe$LAI_2010, main="Europe 2010", col=cl)
+dev.off()
+#MMP calcolo e plottaggio della differeza
+difEuropa10 <- lai_multitemp.Europe$LAI_2010 - lai_multitemp.Europe$LAI_2000
+plot(difEuropa10, main="Differenza Europa 2010-2000", col=cldiff)
+
+# MMP confronto 2010 - 2020
+par(mfrow=c(2,2))
+plot(lai_multitemp.Europe$LAI_2010, main="Europe 2010", col=cl)
+plot(lai_multitemp.Europe$LAI_2020, main="Europe 2020", col=cl)
+dev.off()
+#MMP calcolo e plottaggio della differenza
+difEuropa20 <- lai_multitemp.Europe$LAI_2020 - lai_multitemp.Europe$LAI_2010
+plot(difEuropa20, main="Differenza Europa 2020 - 2010", col=cldiff)
+
+# MMP confronto 2000 - 2020
+par(mfrow=c(2,2))
+plot(lai_multitemp.Europe$LAI_2000, main="Europa 2000", col=cl)
+plot(lai_multitemp.Europe$LAI_2020, main="Europa 2020", col=cl)
+dev.off()
+#MMP calcolo e plottaggio differenza
+difEuropa <- lai_multitemp.Europe$LAI_2020 - lai_multitemp.Europe$LAI_2000
+plot(difEuropa, main=" Differenza Europa", col=cldiff)
+
+####Italia
+extension <- c(0,20,30,50) #MMP vettore coordinate
+zoom(lai_multitemp$LAI_2000, ext=extension)
+
+extension <- c(0,20,30,50)
+lai_multitemp.Italy <- crop(lai_multitemp, extension) # MMP creazione della crop
+
+# MMP plot e boxplot dell'Italia per tutti gli anni
+plot(lai_multitemp.Italy, col=cl, zlim=c(0,250))
+
+boxplot(lai_multitemp.Italy, horizontal=T, outline=F, col="salmon", main="boxplot Italy")
+
+
+#MMP confronto 2000- 2010 e 2020 sull'Italia
+par(mfrow=c(2,2))
+plot(lai_multitemp.Italy$LAI_2000, main="2000", col=cl)
+plot(lai_multitemp.Italy$LAI_2010, main="2010", col=cl)
+plot(lai_multitemp.Italy$LAI_2020, main="2020", col=cl)
+dev.off()
+
+#MMP confronto 2000-2010
+par(mfrow=c(2,2))
+plot(lai_multitemp.Italy$LAI_2000, main="2000", col=cl)
+plot(lai_multitemp.Italy$LAI_2010, main="2010", col=cl)
+dev.off()
+#MMP differenza
+difItalia10 <- lai_multitemp.Italy$LAI_2010 - lai_multitemp.Italy$LAI_2000
+plot(difItalia10, main="Differenza 2010 - 200", col=cldiff)
+
+#MMP confronto 2010 - 2020
+par(mfrow=c(2,2))
+plot(lai_multitemp.Italy$LAI_2010, main="2010", col=cl)
+plot(lai_multitemp.Italy$LAI_2020, main="2020", col=cl)
+dev.off()
+#MMP differenza
+difItalia20 <- lai_multitemp.Italy$LAI_2020 - lai_multitemp.Italy$LAI_2010
+plot(difItalia20, main="Differenza Italia 2020-2010", col=cldiff)
+
+#MMP confronto 2000-2020
+par(mfrow=c(2,2))
+plot(lai_multitemp.Italy$LAI_2000, main="2000", col=cl)
+plot(lai_multitemp.Italy$LAI_2020, main="2020", col=cl)
+dev.off()
+#MMP differemza
+difItalia <- lai_multitemp.Italy$LAI_2020 - lai_multitemp.Italy$LAI_2000
+plot(difItalia, main="Differenza Italia", col=cldiff)
+
+###
+# previsione di cosa accadrà nwl futuro 
+ext <- c(-180,180,-100,100)
+estention <- crop(lai_multitemp, ext)
+time <- 1:nlayers(lai_multitemp)
+
+fun <- function(x){if
+  (is.na(x[1])){NA} else
+  {lm(x ~ time)$coefficients[2]}}
+predicted.lai.2030 <- calc(estention, fun)
+predicted.lai.2030n <- predicted.lai.2030*255/39.513600
+#MMP dopo aver creato la previsione, possiamo eseguire il plottaggio
+plot(predicted.lai.2030n, main="2030", col=cl)
+plot(predicted.lai.2030n, main="2030", col=cl, zlim=c(0,250))
+
+# MMP creo una colorpalette per la previsione e la uso nel plottaggio
+cl30 <- colorRampPalette(c("yellow","dark green","dark blue"))(100)
+plot(predicted.lai.2030n, main="2030", col=cl30, zlim=c(0,250))
+
+# MMP zoom sull' Europa del 2030
+extension <- c(-15,40,15,90)
+Europe30 <- crop(predicted.lai.2030n, extension)
+plot(Europe30, col=cl, zlim=c(0,250))
+
+# MMP e sull'Italia del 2030
+extension <- c(0,20,30,50)
+Italy30 <- crop(predicted.lai.2030n, extension)
+plot(Italy30, col=cl30, zlim=c(0,250))
 
